@@ -5,21 +5,21 @@ using System;
 
 public class Movement : MonoBehaviour
 {
-    public static event Action<Transform> SendCanvasContainer;
     public Vector3 movingPrefabsStartingPosition = new Vector3(0, 29.6f, 90);
-    private float speed = 6f;
-    int canvasindex = 1;
-    int NextElementNumber = 0;
-    float timeuntilAnotherElement = 0;
-    Dictionary<int, List<int>> allSegments;
+
+    public static event Action<Transform> SendCanvasContainer;
     public static event Action<GameObject> newElementSpawned;
     public static event Action<float> sendSpeed;
+
+    private float speed = 6f;
+    private int   NextElementNumber = 0;
+
+    Dictionary<int, List<int>> allSegments;
     void Start()
     {
         GenerateAI.getCanvasContainer += GenerateAI_getCanvasContainer;
         GenerateAI.restartMap += GenerateAI_restartMap;
         allSegments = new Dictionary<int, List<int>>();
-        //Launch.setSpeed += Launch_setSpeed;
         SetupSegments();
     }
     private void OnDestroy()
@@ -40,9 +40,9 @@ public class Movement : MonoBehaviour
         {
             GameObject.Destroy(child.gameObject);
         }
-        GameObject newelementf = (GameObject)Instantiate(Resources.Load("Prefabs/Menus/InGame/Canvas 3"), this.transform.GetChild(0));
-        GameObject newelements = (GameObject)Instantiate(Resources.Load("Prefabs/Menus/InGame/Canvas 2"), this.transform.GetChild(0));
-        GameObject newelementt = (GameObject)Instantiate(Resources.Load("Prefabs/Menus/InGame/Canvas 1"), this.transform.GetChild(0));
+        GameObject newelementf = (GameObject)Instantiate(Resources.Load("Prefabs/Menus/InGameCanvases/Canvas 3"), this.transform.GetChild(0));
+        GameObject newelements = (GameObject)Instantiate(Resources.Load("Prefabs/Menus/InGameCanvases/Canvas 2"), this.transform.GetChild(0));
+        GameObject newelementt = (GameObject)Instantiate(Resources.Load("Prefabs/Menus/InGameCanvases/Canvas 1"), this.transform.GetChild(0));
 
     }
 
@@ -70,7 +70,7 @@ public class Movement : MonoBehaviour
     }
     private void SpawnNextElement()
     {
-        GameObject newelement = (GameObject)Instantiate(Resources.Load("Prefabs/Menus/InGame/Canvas " + NextElementNumber), this.transform.GetChild(0));
+        GameObject newelement = (GameObject)Instantiate(Resources.Load("Prefabs/Menus/InGameCanvases/Canvas " + NextElementNumber), this.transform.GetChild(0));
         newelement.transform.SetAsFirstSibling();
         newElementSpawned?.Invoke(this.gameObject);
 
@@ -83,9 +83,7 @@ public class Movement : MonoBehaviour
             this.transform.position = new Vector3(this.transform.position.x, 9.37f + this.GetComponent<RectTransform>().rect.height, this.transform.position.z);
             ChooseNextElement();
             SpawnNextElement();
-            timeuntilAnotherElement = 0;
         }
         this.transform.position -= new Vector3(0, speed * Time.deltaTime, 0);
-        timeuntilAnotherElement += Time.deltaTime;
     }
 }

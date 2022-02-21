@@ -15,8 +15,6 @@ public class NeuralNetwork
     private float[,] inputToHiddenWeights;
     private float[,] hiddenToOutputWeights;
 
-
-    // To be used in NeuralNetwork Component and Main Menu
     public int HiddenCount = 0;
     public int HiddenLength = 0;
 
@@ -104,7 +102,7 @@ public class NeuralNetwork
     }
 
     /// <summary>
-    /// THe main function of the neural network that accepts an input and computes an output.
+    /// The main function of the neural network that accepts an input and computes an output.
     /// </summary>
     /// <param name="inputValues">The values that form the input layer of the neural network.</param>
     /// <returns>A float value between -1 and 1.</returns>

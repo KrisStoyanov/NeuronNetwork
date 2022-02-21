@@ -14,33 +14,36 @@ public class GenerateAI : MonoBehaviour
         public NeuralNetwork neuralNetwork;
         public float fitness;
     }
-    public static event Action restartMap;
 
+    public static event Action restartMap;
     public static event Action getCanvasContainer;
-    private int GenerationChildren = 50;
-    private int childrenDied = 0;
-    NeuralNetwork bestNeuralNetwork = null;
-    private float bestNNFitness = 0;
-    List<NeuralNetwork> allchildrenBrains = null;
-    List<NeuralNetwork> deadChildren = null;
-    List<float> allchildrenFitness = null;
+
+    private int   GenerationChildren = 50;
+    private int   childrenDied = 0;
+    private int   gen = 0;
+    private int   alive = 0;
+    private int   hiddenLayers = 0;
+    private int   neuronsInLayers = 0;
+    private float playerSpeed = 10f;
+    private float bestNNFitness = 0f;
     private float maxX = 2.8f;
     private float mixX = -2.8f;
+    private float score = 0f;
+    private bool  isItBackProp = false;
+    private bool  inputRecieved = false;
+
+
     Transform highscore = null;
     Transform generation = null;
     Transform aliveChildren = null;
     Transform canvasContainer = null;
-    private float score = 0;
-    private int gen = 0;
-    private int alive = 0;
-    private float playerSpeed = 10f;
+
+    List<NeuralNetwork> allchildrenBrains = null;
+    List<NeuralNetwork> deadChildren = null;
     List<BackPropNetwork> allchildrenBrainsBackProp = null;
-    private bool isItBackProp = false;
+    List<float> allchildrenFitness = null;
 
-    private bool inputRecieved = false;
-    private int hiddenLayers = 0;
-    private int neuronsInLayers = 0;
-
+    NeuralNetwork bestNeuralNetwork = null;
     void Start()
     {
         MainScreen.StartGame += MainScreen_StartGame;
@@ -84,7 +87,7 @@ public class GenerateAI : MonoBehaviour
         GameObject AILocation = this.gameObject.transform.parent.transform.Find("AI").gameObject;
         for (int i = 0; i < GenerationChildren; i++)
         {
-            GameObject Balloon = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Enemies/BalloonAI"), AILocation.transform);
+            GameObject Balloon = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Enemies/Prefabs/BalloonAI"), AILocation.transform);
             if (!isItBackProp)
             {
                 Balloon.AddComponent<NeuralNetworkComponent>();
@@ -110,7 +113,7 @@ public class GenerateAI : MonoBehaviour
         }
         for (int i = 0; i < GenerationChildren; i++)
         {
-            GameObject Balloon = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Enemies/BalloonAI"), AILocation.transform);
+            GameObject Balloon = Instantiate<GameObject>(Resources.Load<GameObject>("Prefabs/Enemies/Prefabs/BalloonAI"), AILocation.transform);
             if (!isItBackProp)
             {
                 Balloon.AddComponent<NeuralNetworkComponent>();
@@ -152,7 +155,6 @@ public class GenerateAI : MonoBehaviour
         allchildrenFitness.Add(CalculateFitness(deadnetwork, score));
         if (this.transform.parent.transform.Find("AI").childCount == 1)
         {
-            //Debug.Log("last man standing!");
             bestNeuralNetwork = this.transform.parent.transform.Find("AI").GetChild(0).transform.GetComponent<NeuralNetworkComponent>().GetNetwork();
             bestNNFitness = score;
         }
@@ -170,7 +172,6 @@ public class GenerateAI : MonoBehaviour
             }
             else
             {
-                //Debug.Log("bestNNFitness: " + bestNNFitness + "< maxFitness: " + pair.fitness);
                 if (bestNNFitness < pair.fitness)
                 {
                     bestNeuralNetwork = neuralNetwork;
@@ -206,7 +207,6 @@ public class GenerateAI : MonoBehaviour
                 maxFitness = allchildrenFitness[i];
             }
         }
-        //Debug.Log("BEST FITNESS: " + maxFitness);
         Pair pair = new Pair();
         pair.neuralNetwork = deadChildren[index];
         pair.fitness = maxFitness;
@@ -285,7 +285,6 @@ public class GenerateAI : MonoBehaviour
     {
         if (score > 2000)
         {
-            Debug.Log("Result 2000 at generation " + gen + " with " + alive + " survivors.");
             EditorApplication.Beep();
         }
         
@@ -401,13 +400,11 @@ public class GenerateAI : MonoBehaviour
             {
                 float expectedResult = CalculateExpectedResult(positionOfRightBranchPoint, positionOfLeftBranchPoint, distanceOfBranch, playerPosition);
                 float neuralNetworkOutput = player.transform.GetComponent<BackPropNetworkComponent>().ReturnOutput(neuralNetworkInput, expectedResult);
-                //Debug.Log(neuralNetworkOutput);
                 if (float.IsNaN(neuralNetworkOutput))
                 {
-                    Debug.Log("Float is NaN.");
+                    Debug.LogError("Float is NaN.");
                 }
                 player.transform.position += new Vector3(neuralNetworkOutput * playerSpeed * Time.deltaTime, 0, 0);
-                //Debug.Log("output: " + neuralNetworkOutput + " | expected output: " + expectedResult);
             }
         }
 
@@ -425,12 +422,10 @@ public class GenerateAI : MonoBehaviour
             }
             if (betweenBranchesX > playerposition.x)
             {
-                //Debug.Log("move right!");
                 returnableValue = 1 / distanceOfBranch;
             }
             else if (betweenBranchesX < playerposition.x)
             {
-                //Debug.Log("move left!");
                 returnableValue = -1 / distanceOfBranch;
             }
         }

@@ -6,12 +6,12 @@ public class BackPropNetworkComponent : MonoBehaviour
 {
     BackPropNetwork propNetwork;
 
-    public int[] layers;// = new int[3] { 3, 10, 1 };
-    public string[] activation;// = new string[2] { "tanh", "tanh" };
+    public int[] layers;
+    public string[] activation;
 
     void Start()
     {
-        //SetNeuralNetwork();
+
     }
 
     public void SetNeuralNetwork(int layer, int length)

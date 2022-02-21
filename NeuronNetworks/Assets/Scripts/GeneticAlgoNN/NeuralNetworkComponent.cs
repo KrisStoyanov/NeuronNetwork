@@ -37,7 +37,7 @@ public class NeuralNetworkComponent : MonoBehaviour
 
     private void Start()
     {
-        //SetNeuralNetwork();
+
     }
 
     public NeuralNetwork GetNetwork()

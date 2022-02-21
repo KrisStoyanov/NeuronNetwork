@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Pickup
+  - Coin
+  - Diamond
+  - Enemy
+  - PowerUp
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Enemy
+  - Pickable
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Pickable
+    uniqueID: 3227483855
+    locked: 0
+  - name: Enemy
+    uniqueID: 192287233
+    locked: 0
+  - name: PowerUp
+    uniqueID: 2612383527
+    locked: 0
+  - name: Player
+    uniqueID: 1912369453
+    locked: 0
